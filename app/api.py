@@ -81,7 +81,7 @@ def api_login():
     password_db = db.get(email)["password"]
 
     if password_db == password :
-        return redirect(url_for('secrets'))
+        return redirect(url_for('secrets_page'))
     else:
         return render_template('login.html', error=error)
 
