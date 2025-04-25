@@ -8,7 +8,6 @@ from cryptography.fernet import Fernet
 import json
 import os
 
-app = Flask(__name__)
 SECRET_KEY = Fernet.generate_key()
 cipher = Fernet(SECRET_KEY)
 
