@@ -1,4 +1,4 @@
-from _datetime import datetime
+from datetime import datetime
 import re
 
 import unicodedata
@@ -20,30 +20,14 @@ def validate_email(email):
     pattern = r'^[a-zA-Z0-9._%+-]+@urosario\.edu\.co$'
     return re.match(pattern, email) is not None
 
-
-# valido la edad
-def validate_dob(dob):
-    birth_date = datetime.strptime(dob, "%Y-%m-%d")
-    today = datetime.today()
-    age = today.year - birth_date.year
-
-    if (today.month, today.day) < (birth_date.month, birth_date.day):
-        age -= 1
-
-    return age >= 18
-
-
-# valido el usuario
-def validate_user(user):
-    patron = r'^[a-zA-Z]+\.[a-zA-Z]+$'
-    return bool(re.fullmatch(patron, user))
-
-
-# valido el dni
-def validate_dni(dni):
+# valido el cedula
+def validate_cedula(cedula):
     patron = r'^\d{10}$'
-    return bool(re.fullmatch(patron, dni))
+    return bool(re.fullmatch(patron, cedula))
 
+def validate_celular(celular):
+    patron = r'^\d{10}$'
+    return bool(re.fullmatch(patron, celular))
 
 # valido la contraseña
 def validate_pswd(pswd):
@@ -62,21 +46,10 @@ class TestValidationFunctions(unittest.TestCase):
         self.assertFalse(validate_email("usuario@urosario.edu"))
         self.assertFalse(validate_email("@urosario.edu.co"))
     
-    def test_validate_dob(self):
-        self.assertTrue(validate_dob("2000-01-01"))  # Mayor de 16
-        self.assertFalse(validate_dob("2010-01-01")) # Menor de 16
-    
-    def test_validate_user(self):
-        self.assertTrue(validate_user("sara.palacios"))
-        self.assertFalse(validate_user("sara_palacios"))
-        self.assertFalse(validate_user("sarapalacios"))
-        self.assertFalse(validate_user("sara.palacios1"))
-        self.assertFalse(validate_user("sara.palacios!"))  # No debe contener caracteres especiales
-    
     def test_validate_dni(self):
-        self.assertTrue(validate_dni("1000000001"))
-        self.assertFalse(validate_dni("10000000001"))
-        self.assertFalse(validate_dni("abcdefg123"))
+        self.assertTrue(validate_cedula("1000000001"))
+        self.assertFalse(validate_cedula("10000000001"))
+        self.assertFalse(validate_cedula("abcdefg123"))
     
     def test_validate_name(self):
         self.assertTrue(validate_name("Sara"))

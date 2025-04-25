@@ -1,21 +1,38 @@
-from _datetime import datetime
+from datetime import datetime
 import time
 from app.validation import *
 from app.reading import *
-from flask import request, jsonify, redirect, url_for, render_template, session, make_response
+from flask import request, jsonify, redirect, url_for, render_template, session, make_response, Flask
 from app import app
+from cryptography.fernet import Fernet
+import json
+import os
 
+app = Flask(__name__)
+SECRET_KEY = Fernet.generate_key()
+cipher = Fernet(SECRET_KEY)
+
+SECRETS_FILE = "secrets.json"
+
+def read_secrets():
+    if not os.path.exists(SECRETS_FILE):
+        return {}
+    with open(SECRETS_FILE, "r") as f:
+        return json.load(f)
+
+def write_secrets(data):
+    with open(SECRETS_FILE, "w") as f:
+        json.dump(data, f, indent=4)
 
 @app.route('/api/users', methods=['POST'])
 def create_record():
     data = request.form
     email = data.get('email')
-    username = data.get('username')
     nombre = data.get('nombre')
     apellido = data.get('Apellidos')
     password = data.get('password')
-    dni = data.get('dni')
-    dob = data.get('dob')
+    cedula = data.get('cedula')
+    celular = data.get('celular')
     errores = []
     print(data)
     # Validaciones
@@ -23,12 +40,9 @@ def create_record():
         errores.append("Email inválido")
     if not validate_pswd(password):
         errores.append("Contraseña inválida")
-    if not validate_dob(dob):
-        errores.append("Fecha de nacimiento inválida")
-        errores.append(dob)
-    if not validate_dni(dni):
-        errores.append("DNI inválido")
-    if not validate_user(username):
+    if not validate_cedula(cedula):
+        errores.append("cedula inválido")
+    if not validate_celular(celular):
         errores.append("Usuario inválido")
     if not validate_name(nombre):
         errores.append("Nombre inválido")
@@ -44,10 +58,9 @@ def create_record():
     db[email] = {
         'nombre': normalize_input(nombre),
         'apellido': normalize_input(apellido),
-        'username': normalize_input(username),
         'password': normalize_input(password),
-        "dni": dni,
-        'dob': normalize_input(dob),
+        "cedula": cedula,
+        "celular": celular,
     }
 
     write_db("db.txt", db)
@@ -69,7 +82,7 @@ def api_login():
     password_db = db.get(email)["password"]
 
     if password_db == password :
-        return redirect(url_for('customer_menu'))
+        return redirect(url_for('secrets'))
     else:
         return render_template('login.html', error=error)
 
@@ -98,3 +111,27 @@ def customer_menu():
 def read_record():
     db = read_db("db.txt")
     return render_template('records.html', users=db)
+
+@app.route("/api/secrets", methods=["GET"])
+def list_secrets():
+    secrets = read_secrets()
+    decrypted = {k: cipher.decrypt(v.encode()).decode() for k, v in secrets.items()}
+    return jsonify(decrypted)
+
+@app.route("/api/secrets", methods=["POST"])
+def add_secret():
+    data = request.json
+    name = data.get("name")
+    value = data.get("value")
+    if not name or not value:
+        return jsonify({"error": "Falta nombre o valor"}), 400
+    secrets = read_secrets()
+    secrets[name] = cipher.encrypt(value.encode()).decode()
+    write_secrets(secrets)
+    return jsonify({"message": "Secreto guardado correctamente"})
+
+@app.route("/secrets")
+def secrets_page():
+    secrets = read_secrets()
+    decrypted = {k: cipher.decrypt(v.encode()).decode() for k, v in secrets.items()}
+    return render_template("secrets.html", secrets=decrypted)
