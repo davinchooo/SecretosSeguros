@@ -1,43 +1,43 @@
-# 🏥 API Segura para Gestión de Historial Médico Electrónico (EHR)
+# 🔐 Sistema de Gestión de Secretos Seguros
 
-Este proyecto implementa una **API RESTful segura** para la gestión de historiales médicos electrónicos, con enfoque en la **protección de datos sensibles** y el **cumplimiento de normativas de privacidad como HIPAA**.
+Este proyecto implementa una **API segura para la gestión de secretos y credenciales**, diseñada para manejar información sensible de forma protegida, centralizada y con buenas prácticas de seguridad.
 
 ---
 
 ## 🎯 Objetivo
 
-Desarrollar una API robusta, segura y escalable que permita a hospitales y clínicas:
+Crear una herramienta robusta que permita a las aplicaciones y usuarios:
 
-- Crear, leer, actualizar y eliminar historiales médicos electrónicos (EHR)
-- Proteger la información médica sensible mediante autenticación, autorización y cifrado
-- Cumplir con regulaciones de seguridad como **HIPAA**
+- Almacenar, consultar, actualizar y eliminar secretos (tokens, claves API, contraseñas, etc.)
+- Controlar el acceso a los secretos de manera segura
+- Cumplir con buenas prácticas de seguridad para proteger la información confidencial
 
 ---
 
 ## 🔐 Características de Seguridad
 
-- ✅ Autenticación mediante JWT
-- ✅ Autorización basada en roles (médico, paciente, administrador)
-- ✅ Cifrado de datos sensibles
-- ✅ Validaciones estrictas de entrada
-- ✅ Manejo seguro de errores
-- ✅ Logs de auditoría
+- ✅ Autenticación con JWT o API Keys
+- ✅ Control de acceso basado en roles o permisos
+- ✅ Cifrado en reposo (AES-256) y en tránsito (HTTPS)
+- ✅ Rotación de secretos y expiración configurable
+- ✅ Auditoría y trazabilidad de accesos y cambios
+- ✅ Protección contra inyecciones y validación de entrada
 
 ---
 
 ## 🧰 Tecnologías
 
-- Backend: `Node.js` / `Express.js` *(puedes ajustar esto si usas otra tecnología)*
+- Backend: `Node.js` / `Express.js` *(puedes modificar esto según tu stack)*
 - Base de datos: `MongoDB` / `PostgreSQL`
-- Seguridad: `JWT`, `HTTPS`, `bcrypt`, `helmet`
-- Cumplimiento: Estándares inspirados en **HIPAA**
+- Seguridad: `bcrypt`, `JWT`, `helmet`, `crypto`
+- Infraestructura sugerida: despliegue en contenedores (`Docker`) con monitoreo y backup seguro
 
 ---
 
 ## 🚀 Instalación y uso
 
 ```bash
-git clone https://github.com/tuusuario/tu-repo.git
+git clone https://github.com/davinchooo/SecretosSeguros.git
 cd tu-repo
 npm install
 npm run dev
