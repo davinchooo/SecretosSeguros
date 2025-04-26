@@ -99,9 +99,12 @@ def create_record():
         errores.append("Nombre inválido")
     if not validate_name(apellido):
         errores.append("Apellido inválido")
-
+    if not validate_pswd(password):
+        errores.append("Contraseña inválida. Agrega mayusculas, minúsculas, números y caracteres especiales. Mínimo 8 caracteres y máximo 35.")
     if errores:
+        print("Errores en validación:", errores)
         return render_template('form.html', error=errores)
+        
 
     hash_pd, salt = hash_with_salt(password, None)
 
@@ -124,7 +127,7 @@ def create_record():
 @app.route('/api/login', methods=['POST'])
 def api_login():
     email = normalize_input(request.form['email'])
-    password = normalize_input(request.form['password'])
+    password = request.form['password']
 
     user = get_user_by_email(email)
     error = "Credenciales inválidas"
