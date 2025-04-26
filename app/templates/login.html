@@ -7,53 +7,64 @@
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    <div class="container mt-5">
-        <!-- Title -->
-        <h1 class="text-center mb-4">Iniciar Sesión</h1>
 
-        <!-- Login Form -->
+    <!-- Bootstrap Icons (para los íconos en los labels) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body style="background: linear-gradient(135deg, #0d6efd, #6610f2); height: 100vh; display: flex; justify-content: center; align-items: center;">
+    
+    <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-6">
-                <div class="card shadow">
+                <div class="card shadow" style="border-radius: 15px; padding: 2rem;">
                     <div class="card-body">
+
+                        <!-- Título dentro del cuadro -->
+                        <h1 class="text-center mb-4 fw-bold text-primary">🔐 Iniciar Sesión</h1>
+
+                        <!-- Formulario de Login -->
                         <form action="/api/login" method="POST">
                             <!-- Email -->
                             <div class="mb-3">
-                                <label for="email" class="form-label">Correo Electrónico</label>
+                                <label for="email" class="form-label">
+                                    <i class="bi bi-envelope-fill me-2"></i>Correo Electrónico
+                                </label>
                                 <input type="email" class="form-control" id="email" name="email" placeholder="Ingrese su correo electrónico" required>
                             </div>
 
                             <!-- Password -->
                             <div class="mb-3">
-                                <label for="password" class="form-label">Contraseña</label>
+                                <label for="password" class="form-label">
+                                    <i class="bi bi-lock-fill me-2"></i>Contraseña
+                                </label>
                                 <input type="password" class="form-control" id="password" name="password" placeholder="Ingrese su contraseña" required>
                             </div>
 
-                            <!-- Submit Button -->
+                            <!-- Botón -->
                             <div class="d-grid gap-2">
-                                <button type="submit" class="btn btn-primary btn-lg">Iniciar Sesión</button>
+                                <button type="submit" class="btn btn-primary btn-lg text-white fw-bold">Iniciar Sesión</button>
                             </div>
                         </form>
 
-                    </div>
-                    {% if error %}
-                        <div class="alert alert-danger text-center" role="alert">
+                        <!-- Mensaje de error -->
+                        {% if error %}
+                        <div class="alert alert-danger text-center mt-3" role="alert">
                             {{ error }}
                         </div>
-                    {% endif %}
+                        {% endif %}
+
+                    </div>
                 </div>
 
-                <!-- Register Link -->
+                <!-- Enlace para registrarse -->
                 <div class="text-center mt-4">
-                    <p>¿No tienes una cuenta? <a href="{{ url_for('register') }}">Regístrate aquí</a></p>
+                    <p>¿No tienes una cuenta? <a href="{{ url_for('register') }}" class="text-light fw-semibold">Regístrate aquí</a></p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Bootstrap JS and Popper.js -->
+    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
