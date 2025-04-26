@@ -18,8 +18,11 @@ def register():
 @app.route('/login', methods=["GET"])
 def login():
     return render_template("login.html")
-    
+
 @app.route('/secrets', methods=["GET"])
 def secrets():
     return render_template("secrets.html")
 
+@app.route('/logout', methods=["GET"])
+def logout():
+    return render_template("logout.html")

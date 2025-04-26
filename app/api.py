@@ -7,11 +7,36 @@ from app import app
 from cryptography.fernet import Fernet
 import json
 import os
+from Crypto.Protocol.KDF import scrypt
+from Crypto.Hash import SHA256
+from Crypto.Random import get_random_bytes
 
 SECRET_KEY = Fernet.generate_key()
 cipher = Fernet(SECRET_KEY)
 
 SECRETS_FILE = "secrets.json"
+
+def hash_with_salt(password, salt):
+    if salt is None:
+        salt = get_random_bytes(16)
+    else:
+        salt = bytes.fromhex(salt)
+
+    # Deriva una clave usando scrypt
+    key = scrypt(password.encode(), salt, key_len=32, N=2**14, r=8, p=1)
+
+    # Crea un hash SHA-256 de la clave derivada
+    hash_obj = SHA256.new(key)
+    hash_value = hash_obj.hexdigest()
+
+    return hash_value, salt
+
+def compare_salt(password, password_db, salt_db):
+    hash_value2 = hash_with_salt(password, salt_db)[0]
+    if (hash_value2 == password_db):
+        return True
+    else:
+        return False
 
 def read_secrets():
     if not os.path.exists(SECRETS_FILE):
@@ -37,8 +62,8 @@ def create_record():
     # Validaciones
     if not validate_email(email):
         errores.append("Email inválido")
-    if not validate_pswd(password):
-        errores.append("Contraseña inválida")
+    #if not validate_pswd(password):
+    #    errores.append("Contraseña inválida")
     if not validate_cedula(cedula):
         errores.append("cedula inválido")
     if not validate_celular(celular):
@@ -54,10 +79,12 @@ def create_record():
     email = normalize_input(email)
 
     db = read_db("db.txt")
+    hash_pd, salt = hash_with_salt(password, None)
     db[email] = {
         'nombre': normalize_input(nombre),
         'apellido': normalize_input(apellido),
-        'password': normalize_input(password),
+        'password': hash_pd,
+        "salt": salt.hex(),
         "cedula": cedula,
         "celular": celular,
     }
@@ -74,14 +101,17 @@ def api_login():
     password = normalize_input(request.form['password'])
 
     db = read_db("db.txt")
+    error = "Credenciales inválidas"
+
     if email not in db:
-        error = "Credenciales inválidas"
         return render_template('login.html', error=error)
 
     password_db = db.get(email)["password"]
+    salt_db = db.get(email)["salt"]
 
-    if password_db == password :
-        return redirect(url_for('secrets_page'))
+    if compare_salt(password, password_db, salt_db):
+        #session['email'] = email
+        return redirect(url_for('secrets'))
     else:
         return render_template('login.html', error=error)
 
@@ -134,3 +164,8 @@ def secrets_page():
     secrets = read_secrets()
     decrypted = {k: cipher.decrypt(v.encode()).decode() for k, v in secrets.items()}
     return render_template("secrets.html", secrets=decrypted)
+
+@app.route("/api/logout", methods=["POST"])
+def api_logout():
+    #session.pop('email', None)
+    return redirect(url_for('index'))
