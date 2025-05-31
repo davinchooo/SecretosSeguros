@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificación MFA</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons (para los íconos en los labels) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body style="background: linear-gradient(135deg, #0d6efd, #6610f2); height: 100vh; display: flex; justify-content: center; align-items: center;">
+    
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow" style="border-radius: 15px; padding: 2rem;">
+                    <div class="card-body">
+
+                        <!-- Título dentro del cuadro -->
+                        <h1 class="text-center mb-4 fw-bold text-primary">Código de verificación</h1>
+
+                        <!-- Formulario de verificación del código -->
+                        <form action="/api/verify" method="POST">
+                            <!-- Código -->
+                            <div class="mb-3">
+                                <label for="codigo" class="form-label">
+                                    <i class="bi bi-lock-fill me-2"></i>Código de verificación
+                                </label>
+                                <input type="text" class="form-control" id="codigo" name="codigo" placeholder="Ingrese el código de verificación" required>
+                            </div>
+
+                            <!-- Botón -->
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary btn-lg text-white fw-bold">Verificar</button>
+                            </div>
+                        </form>
+
+                        <!-- Mensaje de error -->
+                        {% if error %}
+                        <div class="alert alert-danger text-center mt-3" role="alert">
+                            {{ error }}
+                        </div>
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
