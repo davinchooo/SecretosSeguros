@@ -1,43 +1,106 @@
-# 🔐 Sistema de Gestión de Secretos Seguros
+🔐 Secretos Seguros – Sistema Web para Gestión Segura de Credenciales
 
-Este proyecto implementa una **API segura para la gestión de secretos y credenciales**, diseñada para manejar información sensible de forma protegida, centralizada y con buenas prácticas de seguridad.
+Este proyecto implementa una aplicación web segura para almacenar, cifrar y gestionar secretos personales como contraseñas, tokens o claves privadas. Fue desarrollada con buenas prácticas de seguridad y está orientada a reducir la exposición de datos sensibles mediante autenticación multifactor (MFA), cifrado, y automatización.
 
----
+🎯 Objetivo
 
-## 🎯 Objetivo
+Diseñar una herramienta local para que los usuarios puedan:
 
-Crear una herramienta robusta que permita a las aplicaciones y usuarios:
+Almacenar, editar y eliminar secretos de forma privada.
 
-- Almacenar, consultar, actualizar y eliminar secretos (tokens, claves API, contraseñas, etc.)
-- Controlar el acceso a los secretos de manera segura
-- Cumplir con buenas prácticas de seguridad para proteger la información confidencial
+Recibir alertas de seguridad y recordatorios por correo.
 
----
+Contar con protección criptográfica sin intervención administrativa directa.
 
-## 🔐 Características de Seguridad
+Validar el acceso con verificación en dos pasos (MFA).
 
-- ✅ Autenticación con JWT o API Keys
-- ✅ Control de acceso basado en roles o permisos
-- ✅ Cifrado en reposo (AES-256) y en tránsito (HTTPS)
-- ✅ Rotación de secretos y expiración configurable
-- ✅ Auditoría y trazabilidad de accesos y cambios
-- ✅ Protección contra inyecciones y validación de entrada
+🛡️ Funcionalidades de Seguridad
 
----
+✅ Protección de clave secreta mediante .env (nunca expuesta en el código).
 
-## 🧰 Tecnologías
+✅ Cifrado de datos sensibles con Fernet (clave simétrica).
 
-- Backend: `Node.js` / `Express.js` 
-- Base de datos: `MongoDB` / `PostgreSQL`
-- Seguridad: `bcrypt`, `JWT`, `helmet`, `crypto`
-- Infraestructura sugerida: despliegue en contenedores (`Docker`) con monitoreo y backup seguro
+✅ Autenticación multifactor vía correo electrónico.
 
----
+✅ Rotación automática de secretos con recordatorio si no se actualizan.
 
-## 🚀 Instalación y uso
+✅ Ofuscación de valores y datos parcialmente visibles.
 
-```bash
+✅ Bloqueo temporal tras múltiples intentos de login.
+
+✅ Validación de datos únicos: correo, cédula y celular no se pueden repetir.
+
+🧱 Tecnologías Utilizadas
+
+🔧 Framework: Flask (Python)
+
+📂 Base de datos: SQLite + SQLAlchemy
+
+🔐 Cifrado: Fernet (symmetric encryption)
+
+📩 Correos: smtplib + contraseñas de aplicación Gmail
+
+🕒 Tareas programadas: APScheduler
+
+🎨 Frontend: HTML + Bootstrap
+
+🚀 Instalación local
+
+1. Clona el repositorio:
+
 git clone https://github.com/davinchooo/SecretosSeguros.git
-cd tu-repo
-npm install
-npm run dev
+cd SecretosSeguros
+
+2. Instala las dependencias:
+
+pip install -r requirements.txt
+
+3. Crea tu archivo .env:
+
+SECRET_KEY=clave_para_cifrar_secretos
+FLASK_SECRET_KEY=clave_para_sesiones
+EMAIL_USER=tu_correo@gmail.com (con el cual se enviara los correos)
+EMAIL_PASSWORD=tu_contraseña_de_app
+
+⚠️ Asegúrate de haber activado las contraseñas de aplicación en tu cuenta de Gmail.
+
+4. Ejecuta la app:
+
+python run.py
+
+La aplicación se ejecutará por defecto en: http://localhost:5000
+
+📌 Funcionalidades destacadas
+
+Panel principal con bienvenida.
+
+Vista separada para secretos (crear, editar, eliminar).
+
+Vista de perfil con cédula desencriptada parcialmente.
+
+MFA obligatorio al iniciar sesión.
+
+Notificaciones automáticas si un secreto no se actualiza después de 30 días.
+
+📥 Ideas a futuro
+
+Exportar secretos cifrados como respaldo.
+
+Historial de cambios por secreto.
+
+Validación biométrica local.
+
+Uso de tokens de acceso temporal (TOTP).
+
+Autenticación por dispositivos o ubicación.
+
+Automatización total del sistema sin contacto humano.
+
+🧑‍💻 Autores
+
+Proyecto universitario desarrollado por NATALIA ALEJANDRA MARTINEZ MUÑOZ, JUAN DIEGO SOSA BARRETO, David Santiago Vargas Ovalle como parte del curso de Desarrollo de Software Seguro.
+
+🛡️ Licencia
+
+Este proyecto es de código abierto y fue creado únicamente con fines académicos y educativos.
+
